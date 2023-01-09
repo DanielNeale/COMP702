@@ -1655,6 +1655,8 @@ GameObject:
   m_Component:
   - component: {fileID: 693113010}
   - component: {fileID: 693113009}
+  - component: {fileID: 693113012}
+  - component: {fileID: 693113011}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1674,6 +1676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481ad6bfffdf20b41b934c57d7256335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aiCont: {fileID: 693113012}
   wheels:
   - {fileID: 1502466922}
   - {fileID: 1816968655}
@@ -1699,6 +1702,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &693113011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693113008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0f4a7826687ae42a187315f005f9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &693113012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693113008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff52517bab216b44aba754fd851aa26c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ai: {fileID: 693113011}
+  gameCont: {fileID: 693113009}
+  wheels:
+  - {fileID: 1502466923}
+  - {fileID: 1816968656}
+  - {fileID: 560719536}
+  - {fileID: 150643060}
+  - {fileID: 2064244652}
 --- !u!1 &733793830
 GameObject:
   m_ObjectHideFlags: 0

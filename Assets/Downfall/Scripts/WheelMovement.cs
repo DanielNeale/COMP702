@@ -97,4 +97,10 @@ public class WheelMovement : MonoBehaviour
     {
         gameCont = newGameCont;
     }
+
+
+    public int GetSnapAngle()
+    {
+        return snapAngle;
+    }
 }

@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    private bool playerOneTurn = true;
+    [SerializeField]
+    private AIController aiCont;
+
     [SerializeField]
     private GameObject[] wheels;
     private Button[] wheelButtons;
@@ -31,6 +35,19 @@ public class GameController : MonoBehaviour
     }
 
 
+    private void ToggleTurn()
+    {     
+        playerOneTurn = !playerOneTurn;
+        print("player one turn = " + playerOneTurn);
+
+        if (!playerOneTurn)
+        {
+            ToggleButtons(false);
+            aiCont.StartMove();
+        }
+    }
+
+
     private void CheckWin()
     {
         if (SideOneEnd.childCount == 5)
@@ -53,5 +70,10 @@ public class GameController : MonoBehaviour
         }
 
         CheckWin();
+
+        if (enabled)
+        {
+            ToggleTurn();
+        }
     }
 }
