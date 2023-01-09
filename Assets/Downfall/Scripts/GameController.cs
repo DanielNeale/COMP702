@@ -9,6 +9,15 @@ public class GameController : MonoBehaviour
     private GameObject[] wheels;
     private Button[] wheelButtons;
 
+    [SerializeField]
+    private Transform SideOneStart;
+    [SerializeField]
+    private Transform SideTwoStart;
+    [SerializeField]
+    private Transform SideOneEnd;
+    [SerializeField]
+    private Transform SideTwoEnd;
+
 
     private void Start()
     {
@@ -22,11 +31,27 @@ public class GameController : MonoBehaviour
     }
 
 
+    private void CheckWin()
+    {
+        if (SideOneEnd.childCount == 5)
+        {
+            print("Player 1 wins");
+        }
+
+        if (SideTwoEnd.childCount == 5)
+        {
+            print("Player 2 wins");
+        }
+    }
+
+
     public void ToggleButtons(bool enabled)
     {
         for (int i = 0; i < wheelButtons.Length; i++)
         {
             wheelButtons[i].enabled = enabled;
         }
+
+        CheckWin();
     }
 }

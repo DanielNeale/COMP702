@@ -14,10 +14,21 @@ public class CounterMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, detectionRange);
         Debug.DrawRay(transform.position, transform.up * detectionRange, Color.blue);
 
-        if (hit == true && hit.transform.GetComponent<CircleCollider2D>() && hit.transform.position.y < transform.position.y)
+        if (hit == true && hit.transform.position.y < transform.position.y)
         {
-            NewParent(hit.transform);
+            if (hit.transform.GetComponent<CircleCollider2D>())
+            {
+                NewParent(hit.transform);
+            }
+
+            else if (hit.transform.GetComponent<BoxCollider2D>())
+            {
+                parent.GetComponent<CircleCollider2D>().enabled = true;
+                transform.SetParent(hit.transform, false);
+            }
         }
+
+        
     }
 
 
