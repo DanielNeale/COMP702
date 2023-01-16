@@ -38,7 +38,6 @@ public class GameController : MonoBehaviour
     private void ToggleTurn()
     {     
         playerOneTurn = !playerOneTurn;
-        print("player one turn = " + playerOneTurn);
 
         if (!playerOneTurn)
         {
