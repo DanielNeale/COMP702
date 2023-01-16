@@ -103,4 +103,10 @@ public class WheelMovement : MonoBehaviour
     {
         return snapAngle;
     }
+
+
+    public Transform GetPair()
+    {
+        return pairWheel;
+    }
 }

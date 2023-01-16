@@ -37,15 +37,30 @@ public class DownfallAI : MonoBehaviour
                     }
                 }
             }
-
-            PossibleMoves newMove = new PossibleMoves();
+            
             List<float> angles = new List<float>();
 
             for (int j = 0; j < newExits.Count; j++)
             {
+                Vector2 exitPos = newExits[j].position;
+                Vector2 wheelPos = slots[i].parent.position;
 
+                float newAngle = Vector2.Angle(Vector2.up, exitPos - wheelPos);
+                
+                if (exitPos.x < wheelPos.x)
+                {
+                    newAngle = 360 - newAngle;
+                }
+
+                angles.Add(newAngle);
+                angles.Add(newAngle + 360);
             }
 
+            PossibleMoves newMove = new PossibleMoves();
+            float[] newOptions = angles.ToArray();
+
+            newMove.SetMoves(slots[i], newOptions);
+            moveList.Add(newMove);
         }
 
         // Set wheels and start game
@@ -56,9 +71,29 @@ public class DownfallAI : MonoBehaviour
     {
         Rotation newMove = new Rotation();
 
-        
+        PossibleMoves randMove = moveList[Random.Range(0, moveList.Count)];
+        float rotation = randMove.GetMove();
+        Transform wheel = randMove.GetSlot().parent;
+
+        rotation = (rotation - wheel.rotation.z) / 6;
+
+        newMove.Set(WheelToInt(wheel), true, ((int)Mathf.Floor(rotation)));
 
         return newMove;
+    }
+
+
+    private int WheelToInt(Transform wheel)
+    {
+        for (int i = 0; i < AIWheels.Length; i++)
+        {
+            if (AIWheels[i] == wheel)
+            {
+                return i;
+            }
+        }
+
+        return 0;
     }
 }
 

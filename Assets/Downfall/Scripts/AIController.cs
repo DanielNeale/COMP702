@@ -38,6 +38,8 @@ public class AIController : MonoBehaviour
             }
 
             wheel.Rotate(new Vector3(0, 0, snap * dir));
+            Transform pairWheel = wheel.GetComponent<WheelMovement>().GetPair();
+            pairWheel.Rotate(new Vector3(0, 0, snap * dir));
 
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
