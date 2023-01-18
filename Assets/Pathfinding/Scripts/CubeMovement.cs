@@ -7,6 +7,8 @@ public class CubeMovement : MonoBehaviour
     [SerializeField]
     private LongRangePF pathFinder;
     [SerializeField]
+    private ShortRangePF objectAvoidance;
+    [SerializeField]
     private Transform target;
 
     [SerializeField]
@@ -21,6 +23,7 @@ public class CubeMovement : MonoBehaviour
 
     private void Update()
     {
+        // starts the pathfinding
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartCoroutine(pathFinder.CalculatePath(this, transform.position, target.position));
@@ -30,11 +33,37 @@ public class CubeMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // only runs when there is a path to follow
         if (path.Length > 0)
         {
-            transform.LookAt(path[waypoint]);
+            // try to shortcut the path
+            for (int i = path.Length - 1; i > waypoint; i--)
+            {
+                if (!Physics.Linecast(transform.position, path[i]))
+                {
+                    waypoint = i;
+                    break;
+                }
+            }
+            
+            // switch between systems depending on information
+            if (Physics.Linecast(transform.position, path[waypoint]))
+            {
+                moveTarget = objectAvoidance.ObjectAvoidance();
+                print(moveTarget);
+            }
+
+            else
+            {               
+                moveTarget = path[waypoint];
+                print(moveTarget);
+            }            
+
+            // look and move
+            transform.LookAt(moveTarget);
             transform.position += (transform.forward * speed);
 
+            // move onto the next waypoint if close enough
             if (Vector3.Distance(transform.position, path[waypoint]) < waypointTolerance)
             {
                 waypoint++;
@@ -49,6 +78,10 @@ public class CubeMovement : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Path data sent from LongRangePF
+    /// </summary>
+    /// <param name="newPath"> new path data </param>
     public void SetPath(Vector3[] newPath)
     {
         path = newPath;
