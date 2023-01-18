@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134659623}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.6, y: 0.52, z: 10.3}
+  m_LocalPosition: {x: 11.32, y: 0.52, z: 10.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1137,6 +1137,7 @@ GameObject:
   - component: {fileID: 1400884183}
   - component: {fileID: 1400884182}
   - component: {fileID: 1400884181}
+  - component: {fileID: 1400884185}
   m_Layer: 0
   m_Name: Evan
   m_TagString: Untagged
@@ -1215,13 +1216,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400884180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.97, y: 0.52, z: -10.78}
+  m_LocalPosition: {x: -10.52, y: 0.52, z: -10.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1400884185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400884180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0739f5cf27b24b241a8c1bd8e1e7b11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathFinder: {fileID: 1675168035}
+  target: {fileID: 134659627}
+  speed: 0.3
+  waypointTolerance: 0.5
 --- !u!1 &1451464623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,7 +1459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b6b8942c6060640b95e0f604987f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeGap: 2.5
+  nodeGap: 3
   node: {fileID: 8656949089352336511, guid: 4d8c504c960b9a54fb2020ce74a06762, type: 3}
   debugStart: {fileID: 1400884184}
   debugEnd: {fileID: 134659627}

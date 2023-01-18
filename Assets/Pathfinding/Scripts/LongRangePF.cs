@@ -26,8 +26,6 @@ public class LongRangePF : MonoBehaviour
         nodeReach[5] = new Vector3(-1, 0, -1) * nodeGap;
         nodeReach[6] = new Vector3(-1, 0, 0) * nodeGap;
         nodeReach[7] = new Vector3(-1, 0, 1) * nodeGap;
-
-        StartCoroutine(CalculatePath(debugStart.position, debugEnd.position));
     }
 
 
@@ -39,18 +37,16 @@ public class LongRangePF : MonoBehaviour
     }
 
 
-    private IEnumerator CalculatePath(Vector3 start, Vector3 end)
+    public IEnumerator CalculatePath(CubeMovement cube, Vector3 start, Vector3 end)
     {
-        bool solved = false;
+        Transform lastNode = null;
 
         Stack<Transform> nodes = new Stack<Transform>();
         Transform firstNode = Instantiate(node, start, node.rotation, transform);
         nodes.Push(firstNode);
 
-        while (solved == false)
+        while (lastNode == null)
         {
-            print("loop");
-
             Transform currentNode = nodes.Pop();
             List<Transform> newNodes = new List<Transform>();
 
@@ -65,7 +61,7 @@ public class LongRangePF : MonoBehaviour
 
                     if (Vector3.Distance(newNode.position, end) < nodeGap)
                     {
-                        solved = true;
+                        lastNode = newNode;
                     }
                 }
             }
@@ -101,6 +97,32 @@ public class LongRangePF : MonoBehaviour
         }
 
 
+        List<Vector3> path = new List<Vector3>();
+        path.Add(end);
+
+        while(lastNode.parent != null)
+        {
+            path.Add(lastNode.position);
+            lastNode = lastNode.parent;
+        }
+
+        path.Add(start);
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Debug.DrawLine(path[i], path[i + 1], Color.blue, 10);
+        }
+
+        path.Reverse();
+
+        cube.SetPath(path.ToArray());
+
+        Destroy(transform.GetChild(0).gameObject);
+
+        for (int i = transform.childCount - 1; i > 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
 
         yield return new WaitForEndOfFrame();
     }
