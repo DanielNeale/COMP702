@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private GameObject[] wheels;
+    [SerializeField]
+    private GameObject[] aiWheels;
     private Button[] wheelButtons;
 
     [SerializeField]
@@ -25,6 +27,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        // sets wheel buttons and game controller on wheels
         wheelButtons = new Button[wheels.Length];
 
         for (int i = 0; i < wheels.Length; i++)
@@ -35,6 +38,9 @@ public class GameController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Toggles who's turn it is
+    /// </summary>
     private void ToggleTurn()
     {     
         playerOneTurn = !playerOneTurn;
@@ -47,6 +53,9 @@ public class GameController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Checks counter number to see if anyone has won
+    /// </summary>
     private void CheckWin()
     {
         if (SideOneEnd.childCount == 5)
@@ -61,8 +70,13 @@ public class GameController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Controls the buttons on the wheels
+    /// </summary>
+    /// <param name="enabled"> the button state </param>
     public void ToggleButtons(bool enabled)
     {
+        // changes button state
         for (int i = 0; i < wheelButtons.Length; i++)
         {
             wheelButtons[i].enabled = enabled;
@@ -73,6 +87,23 @@ public class GameController : MonoBehaviour
         if (enabled)
         {
             ToggleTurn();
+        }
+    }
+
+
+    /// <summary>
+    /// Randomly sets the wheels at the start of the game
+    /// </summary>
+    public void SetWheels()
+    {
+        for (int i = 0; i < wheels.Length; i++)
+        {
+            wheels[i].transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
+        }
+
+        for (int i = 0; i < aiWheels.Length; i++)
+        {
+            aiWheels[i].transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
         }
     }
 }

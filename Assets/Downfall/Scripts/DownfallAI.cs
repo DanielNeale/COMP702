@@ -5,14 +5,20 @@ using UnityEngine;
 public class DownfallAI : MonoBehaviour
 {
     [SerializeField]
+    private GameController gameCont;
+    [SerializeField]
     private Transform[] AIWheels;
     [SerializeField]
     private Transform[] exits;
+
     private List<PossibleMoves> moveList = new List<PossibleMoves>();
 
-
+    /// <summary>
+    /// At the start of the game a data set is made of all sensible moves
+    /// </summary>
     private void Start()
     {
+        // gets a list of all the slots
         List<Transform> slots = new List<Transform>();
 
         for (int i = 0; i < AIWheels.Length; i++)
@@ -23,8 +29,10 @@ public class DownfallAI : MonoBehaviour
             }
         }
 
+        // calculates all moves for each slot
         for (int i = 0; i < slots.Count; i++)
         {
+            // gets all exits available to the slot
             List<Transform> newExits = new List<Transform>();
 
             for (int j = 0; j < exits.Length; j++)
@@ -38,6 +46,7 @@ public class DownfallAI : MonoBehaviour
                 }
             }
             
+            // calculates the angle for each exit
             List<float> angles = new List<float>();
 
             for (int j = 0; j < newExits.Count; j++)
@@ -52,10 +61,12 @@ public class DownfallAI : MonoBehaviour
                     newAngle = 360 - newAngle;
                 }
 
+                // adds the new angle and the new angle with a full rotation
                 angles.Add(newAngle);
                 angles.Add(newAngle + 360);
             }
 
+            // formats and adds all options to the data set
             PossibleMoves newMove = new PossibleMoves();
             float[] newOptions = angles.ToArray();
 
@@ -64,25 +75,81 @@ public class DownfallAI : MonoBehaviour
         }
 
         // Set wheels and start game
+        gameCont.SetWheels();
     }
 
 
+    /// <summary>
+    /// Called when the ai needs to make a move
+    /// </summary>
+    /// <returns> returns the ai movement decision </returns>
     public Rotation Move()
     {
         Rotation newMove = new Rotation();
 
-        PossibleMoves randMove = moveList[Random.Range(0, moveList.Count)];
-        float rotation = randMove.GetMove();
-        Transform wheel = randMove.GetSlot().parent;
+        float highScore = -1;
 
-        rotation = (rotation - wheel.rotation.z) / 6;
+        // runs through all options and evaluates
+        for (int i = 0; i < moveList.Count; i++)
+        {
+            int moveScore = 0;
 
-        newMove.Set(WheelToInt(wheel), true, ((int)Mathf.Floor(rotation)));
+            PossibleMoves tryMove = moveList[i];
+            Transform thisSlot = tryMove.GetSlot();
+            Transform wheel = thisSlot.parent;
+            float[] rotations = tryMove.GetMoves();
+            
+            // gets angle slot is at
+            float slotOffset = Vector3.Angle(Vector3.up, thisSlot.position - wheel.position);
+
+            if (wheel.position.x < thisSlot.position.x)
+            {
+                slotOffset = 360 - slotOffset;
+            }
+
+            // runs through the rotations for the slot
+            for (int j = 0; j < rotations.Length; j++)
+            {
+                // the attempted rotation
+                float thisRotation = rotations[j] - wheel.rotation.z;
+                // the end rotation
+                float rotatedPos = slotOffset + thisRotation;
+
+                if (rotatedPos > 360)
+                {
+                    rotatedPos -= 360;
+                }
+
+                // reward move if counter is moved down
+                if (rotatedPos > 90 && rotatedPos < 270 && thisSlot.childCount > 0)
+                {
+                    moveScore += 2;
+                }
+
+                // reward move if slot with no counter is moved up
+                else if (rotatedPos < 90 && rotatedPos > 270 && thisSlot.childCount == 0)
+                {
+                    moveScore += 1;
+                }
+
+                // sets move if it's best found
+                if (moveScore > highScore)
+                {
+                    highScore = moveScore;
+                    newMove.Set(WheelToInt(wheel), true, ((int)Mathf.Floor(thisRotation / 6)));
+                }
+            } 
+        }
 
         return newMove;
     }
 
 
+    /// <summary>
+    /// Gets the index of the wheel
+    /// </summary>
+    /// <param name="wheel"> wheel to be indexed </param>
+    /// <returns> the wheel's index </returns>
     private int WheelToInt(Transform wheel)
     {
         for (int i = 0; i < AIWheels.Length; i++)
@@ -98,6 +165,9 @@ public class DownfallAI : MonoBehaviour
 }
 
 
+/// <summary>
+/// Holds the data of possible moves
+/// </summary>
 public class PossibleMoves
 {
     private Transform slot;
@@ -114,8 +184,8 @@ public class PossibleMoves
         return slot;
     }
 
-    public float GetMove()
+    public float[] GetMoves()
     {
-        return options[Random.Range(0, options.Length)];
+        return options;
     }
 }

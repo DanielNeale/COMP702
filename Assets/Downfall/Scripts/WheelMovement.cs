@@ -34,8 +34,10 @@ public class WheelMovement : MonoBehaviour
     {
         if (rotating)
         {
+            // tracks the number of rotations by mouse x position
             int rotations = Mathf.FloorToInt((Input.mousePosition.x - mouseStartX) / sensitivity);
 
+            // stops player from rotating in 2 directions
             if (lockRotation)
             {
                 if (clockwise && rotations < lastAngle)
@@ -51,9 +53,11 @@ public class WheelMovement : MonoBehaviour
 
             lastAngle = rotations;
 
+            // rotates both player and ai wheels
             thisWheel.rotation = Quaternion.Euler(0, 0, thisWheelZ - (rotations * snapAngle));
             pairWheel.rotation = Quaternion.Euler(0, 0, pairWheelZ + (rotations * snapAngle));
 
+            // locks rotation in one direction if the player starts rotating
             if (!lockRotation)
             {
                 if ((Input.mousePosition.x - mouseStartX) / sensitivity > 1)
@@ -69,6 +73,7 @@ public class WheelMovement : MonoBehaviour
                 }
             }
 
+            // ends player turn and stops rotating
             if (Input.GetMouseButton(0))
             {
                 rotating = false;
@@ -80,6 +85,9 @@ public class WheelMovement : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Called by a button to start a rotation
+    /// </summary>
     public void StartRotation()
     {
         if (rotating == false)
